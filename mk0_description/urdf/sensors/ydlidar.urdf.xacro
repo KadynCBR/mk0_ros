@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<robot name="sensor_ydlidar_X2L" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find mk0_description)/urdf/turtlebot_gazebo.urdf.xacro" />
+  <xacro:include filename="$(find mk0_description)/urdf/turtlebot_properties.urdf.xacro" />
+
+  <!-- mount params -->
+  <xacro:property name="x2l_height" value=".039" />
+  <xacro:property name="x2l_radius" value=".0405" />
+
+  <xacro:macro name="sensor_x2l" params="parent">
+    <link name="lidar_link">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="0.125" />
+        <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+      </inertial>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="${x2l_radius}" length="${x2l_height}" />
+        </geometry>
+      </collision>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="${x2l_radius}" length="${x2l_height}" />
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="lidar_joint" type="fixed">
+      <parent link="${parent}" />
+      <child link="lidar_link" />
+      <origin xyz="0.12 0 0.215" rpy="0 0 0" />
+    </joint>
+
+    <!-- simulation sensor -->
+    <xacro:ydlidar_sim_lidarsensor />
+  </xacro:macro>
+</robot>

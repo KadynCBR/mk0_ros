@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!-- A lot of this is going to be pulled from the turtlebot repo, but modified to reflect mk0's current setup as it's more of a ghetto turtlebot. -->
+<!--
+    - Base      :  kobuki
+    - Stacks    :  hexagons
+    - 3d Sensor :  r200
+    - lidar     :  ydlidar X2L
+-->
+<robot name="marko" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find mk0_description)/urdf/turtlebot_common_library.urdf.xacro" />
+  <xacro:include filename="$(find kobuki_description)/urdf/kobuki.urdf.xacro" />
+  <xacro:include filename="$(find mk0_description)/urdf/stacks/hexagons.urdf.xacro" />
+  <xacro:include filename="$(find mk0_description)/urdf/sensors/r200.urdf.xacro" />
+  <xacro:include filename="$(find mk0_description)/urdf/sensors/ydlidar.urdf.xacro" />
+
+  <xacro:kobuki />
+  <xacro:stack_hexagons parent="base_link" />
+  <!-- r200 isn't mounted yet, when it is remove this. -->
+  <!-- <xacro:sensor_r200 parent="base_link" /> -->
+  <xacro:sensor_x2l parent="base_link" />
+
+</robot>

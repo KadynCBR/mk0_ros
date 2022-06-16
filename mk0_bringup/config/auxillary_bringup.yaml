@@ -27,7 +27,14 @@ windows:
   - name: velocity_smoother_keyop
     commands:
       - ros2 run velocity_smoother velocity_smoother --ros-args -r /velocity_smoother/input:=/input/keyop_raw -r /velocity_smoother/smoothed:=/input/keyop
+  
+# Navigation
+  - name: slam_toolbox
+    commands: ros2 launch slam_toolbox online_async_launch.py
 
+  - name: rviz
+    commands:
+      - ros2 launch mk0_description display.launch.py
 # FEEDBACK
 # Sound Server
 # Light Server

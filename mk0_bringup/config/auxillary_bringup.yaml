@@ -23,6 +23,7 @@ windows:
     commands:
       - echo "Launching Kobuki Key op"
       - ros2 run kobuki_keyop kobuki_keyop_node --ros-args -r /cmd_vel:=/input/keyop_raw
+      
   # keyop velocity smoother
   - name: velocity_smoother_keyop
     commands:
@@ -30,7 +31,18 @@ windows:
   
 # Navigation
   - name: slam_toolbox
-    commands: ros2 launch slam_toolbox online_async_launch.py
+    commands: 
+      - ros2 launch slam_toolbox online_async_launch.py
+
+
+########### State Publishers #############
+  - name: State Publishers
+    commands:
+      - ros2 launch mk0_description state_publishers.launch.py
+
+  - name: Robot localization
+    commands:
+      - ros2 run robot_localization ekf_node -params-file $(ros2 pkg prefix mk0_bringup)/share/mk0_bringup/config/ekf.yaml
 
   - name: rviz
     commands:

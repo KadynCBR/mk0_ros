@@ -25,12 +25,6 @@ windows:
 #     commands:
 #       - ros2 run realsensewhatever
 
-########### State Publishers #############
-  - name: State Publishers
-    commands:
-      - ros2 launch mk0_description state_publishers.launch.py
-
-
 ########### Velocity output nodes ###########
   - name: Kobuki_SAFE_CTRL
     commands:

@@ -23,7 +23,7 @@ class KobukiEvents(Enum):
 
 class EventListener(Node):
     def __init__(self):
-        super().__init__('mk0_event_listener')
+        super().__init__('mk0_event_monitor')
         self.subscription = self.create_subscription(
             SensorState,
             '/sensors/core',
@@ -36,27 +36,27 @@ class EventListener(Node):
             KobukiEvents.BUMPER: {
                 "timer": 0,
                 "reset_time": 10,
-                "sound": self.sounds[0]
+                "sound": self.sounds[3]
             },
             KobukiEvents.CLIFF: {
                 "timer": 0,
                 "reset_time": 10,
-                "sound": self.sounds[0]
+                "sound": self.sounds[3]
             },
             KobukiEvents.WHEEL_DROP: {
                 "timer": 0,
                 "reset_time": 10,
-                "sound": self.sounds[0]
+                "sound": self.sounds[3]
             },
             KobukiEvents.BATTERY_WARNING: {
                 "timer": 0,
                 "reset_time": 10,
-                "sound": self.sounds[0]
+                "sound": self.sounds[4]
             },
             KobukiEvents.BATTERY_CRITICAL: {
                 "timer": 0,
                 "reset_time": 2,
-                "sound": self.sounds[0]
+                "sound": self.sounds[5]
             },
         }
 
@@ -90,6 +90,7 @@ class EventListener(Node):
 
 
 def main(args=None):
+    print("Starting event server. Listening for events on /sensors/core")
     rclpy.init(args=args)
     event_listener = EventListener()
 
@@ -101,3 +102,8 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+    # sounds = glob('/home/cherry/sounds/*')
+    # while True:
+    #     for sound in sounds:
+    #         print(sound)
+    #         playsound(sound)

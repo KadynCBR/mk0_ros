@@ -25,6 +25,10 @@ windows:
 #     commands:
 #       - ros2 run realsensewhatever
 
+  - name: mk0 Event Monitor
+    commands:
+      - ros2 run mk0_event_server mk0_event_server
+
 ########### Velocity output nodes ###########
   - name: Kobuki_SAFE_CTRL
     commands:

@@ -32,7 +32,8 @@ windows:
 # Navigation
   - name: slam_toolbox
     commands: 
-      - ros2 launch slam_toolbox online_async_launch.py
+      # - ros2 launch slam_toolbox online_async_launch.py
+      - ros2 launch mk0_bringup bringup_launch.py map:=/home/cherry/.maps/home_map.yaml controller_output_topic:=input/navigation params_file:=$(ros2 pkg prefix mk0_bringup)/share/mk0_bringup/config/nav2_params.yaml
 
 
 ########### State Publishers #############

@@ -33,7 +33,7 @@
     <joint name="lidar_joint" type="fixed">
       <parent link="${parent}" />
       <child link="lidar_link" />
-      <origin xyz="0.12 0 0.215" rpy="0 0 0" />
+      <origin xyz="0.12 0 0.248" rpy="0 0 0" />
     </joint>
 
     <!-- simulation sensor -->

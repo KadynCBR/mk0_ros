@@ -12,6 +12,9 @@ from kobuki_ros_interfaces.msg import SensorState
 # and will generate a sound to let outside user know something is occurring.
 # my batteries have died too often without me knowing :C
 
+# Remaps value s from (a1,a2) to (b1, b2)
+def remap(s, a1, a2, b1, b2):
+    return b1 + (s-a1)*(b2-b1)/(a2-a1)
 
 class KobukiEvents(Enum):
     BUMPER = 0
@@ -31,6 +34,7 @@ class EventListener(Node):
             10
         )
         self.kobuki_base_max_charge = 160  # empirically obtained from full charge
+        self.kobuki_base_zero_charge = 102.4 # trying this since it died around "64%"
         self.sounds = glob('/home/cherry/sounds/*')
         self.event_info = {
             KobukiEvents.BUMPER: {
@@ -62,9 +66,13 @@ class EventListener(Node):
 
     def state_recieved(self, msg: SensorState):
         self.get_logger().info("state message recieved")
-        # something sus about this..
-        battery_percentage = round(
-            float(msg.battery)/float(self.kobuki_base_max_charge)*100)
+        battery_percentage = remap(
+            float(msg.battery),
+            self.kobuki_base_zero_charge,
+            self.kobuki_base_max_charge,
+            0, 100)
+
+
         self.get_logger().info(f"Kobuki Battery: {battery_percentage} %")
         if (msg.bumper != 0):
             self.trigger_event(KobukiEvents.BUMPER)

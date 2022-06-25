@@ -39,14 +39,6 @@ def generate_launch_description():
         name="joint_state_publisher",
         parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
     )
-    rviz_node = launch_ros.actions.Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="screen",
-        arguments=["-d", LaunchConfiguration("rvizconfig")],
-        parameters=[{"use_sim_time": LaunchConfiguration("use_sim_time")}],
-    )
     spawn_entity = launch_ros.actions.Node(
         package="gazebo_ros",
         executable="spawn_entity.py",
@@ -104,6 +96,5 @@ def generate_launch_description():
             robot_state_publisher_node,
             spawn_entity,
             robot_localization_node,
-            rviz_node,
         ]
     )

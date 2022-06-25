@@ -39,7 +39,7 @@ install(
   DESTINATION lib/${PROJECT_NAME}
 )
 install(
-  PROGRAMS scripts/simple_bringup_simulation.sh
+  PROGRAMS scripts/simulation_bringup.sh
   DESTINATION lib/${PROJECT_NAME}
 )
 

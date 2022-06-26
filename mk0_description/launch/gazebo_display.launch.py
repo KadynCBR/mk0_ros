@@ -9,6 +9,9 @@ def generate_launch_description():
     pkg_share = launch_ros.substitutions.FindPackageShare(
         package="mk0_description"
     ).find("mk0_description")
+    bringup_share = launch_ros.substitutions.FindPackageShare(
+        package="mk0_bringup"
+    ).find("mk0_bringup")
     default_model_path = os.path.join(
         pkg_share, "robots/mk0_hexagon_base.urdf.xacro"
     )
@@ -53,7 +56,7 @@ def generate_launch_description():
         name="ekf_filter_node",
         output="screen",
         parameters=[
-            os.path.join(pkg_share, "config/ekf.yaml"),
+            os.path.join(bringup_share, "config/ekf.yaml"),
             {"use_sim_time": LaunchConfiguration("use_sim_time")},
         ],
     )

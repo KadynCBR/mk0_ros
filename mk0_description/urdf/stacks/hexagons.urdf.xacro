@@ -23,12 +23,12 @@
           <mesh filename="file://$(find mk0_description)/meshes/stacks/hexagons/pole_bottom.dae" />
         </geometry>
       </visual>
-      <collision>
+      <!-- <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <cylinder length="0.0492" radius="0.006" />
         </geometry>
-      </collision>
+      </collision> -->
       <inertial>
         <mass value="0.008" />
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -50,12 +50,12 @@
           <mesh filename="file://$(find mk0_description)/meshes/stacks/hexagons/pole_middle.dae" />
         </geometry>
       </visual>
-      <collision>
+      <!-- <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <cylinder length="0.0608" radius="0.006" />
         </geometry>
-      </collision>
+      </collision> -->
       <inertial>
         <mass value="0.012" />
         <origin xyz="0 0 0" />
@@ -77,12 +77,12 @@
           <mesh filename="file://$(find mk0_description)/meshes/stacks/hexagons/pole_top.dae" />
         </geometry>
       </visual>
-      <collision>
+      <!-- <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <cylinder length="0.2032" radius="0.006" />
         </geometry>
-      </collision>
+      </collision> -->
       <inertial>
         <mass value="0.060" />
         <origin xyz="0 0 0" />
@@ -104,12 +104,12 @@
           <mesh filename="file://$(find mk0_description)/meshes/stacks/hexagons/pole_kinect.dae" />
         </geometry>
       </visual>
-      <collision>
+      <!-- <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <cylinder length="0.0936" radius="0.006" />
         </geometry>
-      </collision>
+      </collision> -->
       <inertial>
         <mass value="0.020" />
         <origin xyz="0 0 0" />
@@ -143,12 +143,12 @@
           <mesh filename="file://$(find mk0_description)/meshes/stacks/hexagons/plate_bottom.dae" />
         </geometry>
       </visual>
-      <collision>
+      <!-- <collision>
         <origin xyz="-0.02364 0 0" rpy="0 0 0" />
         <geometry>
           <cylinder length="0.006" radius="0.170" />
         </geometry>
-      </collision>
+      </collision> -->
       <inertial>
         <mass value="0.520" />
         <origin xyz="0 0 0" />
@@ -179,12 +179,12 @@
           <mesh filename="file://$(find mk0_description)/meshes/stacks/hexagons/plate_middle.dae" />
         </geometry>
       </visual>
-      <collision>
+      <!-- <collision>
         <origin xyz="0.01364 0.0 0.0" rpy="0 0 0" />
         <geometry>
           <mesh filename="file://$(find mk0_description)/meshes/stacks/hexagons/plate_simple.stl" scale="${M_SCALE} ${M_SCALE} ${M_SCALE}" />
         </geometry>
-      </collision>
+      </collision> -->
       <inertial>
         <mass value="0.520" />
         <origin xyz="0 0 0" />

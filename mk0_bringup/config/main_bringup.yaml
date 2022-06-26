@@ -7,11 +7,11 @@ common:
 windows:
 ########### Hardware Drivers #############
   - name: Kobuki Core
-    commands:
+    - commands:
       - echo "Launching Kobuki Core node"
       - ros2 launch kobuki_node kobuki_node-launch.py
   - name: YDLidar
-    commands:
+    - commands:
       - . $MK0_WS/install/setup.bash
       - echo "Launching YDLidar"
       - ros2 launch ydlidar_ros2_driver ydlidar_launch.py
@@ -20,9 +20,9 @@ windows:
   - name: Kobuki Safety Controller And CVX
     layout: tiled
     splits:
-      commands:
+      - commands:
         - ros2 run kobuki_safety_controller kobuki_safety_controller_node --ros-args -r /cmd_vel:=/input/safety_controller
-      commands:
+      - commands:
         - ros2 run cmd_vel_mux cmd_vel_mux_node --ros-args --params-file $(ros2 pkg prefix mk0_bringup)/share/mk0_bringup/config/cmd_vel_mux_params.yaml -r /cmd_vel:=/commands/velocity
 
 ########### Event Monitors #############

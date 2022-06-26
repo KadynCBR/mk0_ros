@@ -12,9 +12,9 @@ windows:
     if: slam
     layout: tiled
     splits:
-      commands: 
+      - commands: 
         - ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true
-      commands:
+      - commands:
         # is this even needed?
         - ros2 run velocity_smoother velocity_smoother --ros-args -r /velocity_smoother/input:=/input/navigation_raw -r /velocity_smoother/smoothed:=/input/navigation
 
@@ -22,9 +22,9 @@ windows:
     unless: slam
     layout: tiled
     splits:
-      commands:
+      - commands:
         - ros2 launch mk0_bringup bringup_launch.py map:=/home/cherry/.maps/home_map.yaml controller_output_topic:=input/navigation_raw params_file:=$(ros2 pkg prefix mk0_bringup)/share/mk0_bringup/config/nav2_params.yaml use_sim_time:=true
-      commands:
+      - commands:
         - ros2 run velocity_smoother velocity_smoother --ros-args -r /velocity_smoother/input:=/input/navigation_raw -r /velocity_smoother/smoothed:=/input/navigation
 
 ########### Gazebo Launch #############
@@ -37,25 +37,25 @@ windows:
   - name: Joy Launch
     layout: tiled
     splits:
-      commands:
+      - commands:
         - ros2 launch teleop_twist_joy teleop-launch.py joy_config:='xbox' joy_vel:=/input/joystick_raw
-      commands:
+      - commands:
         - ros2 run velocity_smoother velocity_smoother --ros-args -r /velocity_smoother/input:=/input/joystick_raw -r /velocity_smoother/smoothed:=/input/joystick
 
   - name: Kobuki Keyop
     layout: tiled
     splits:
-      commands:
+      - commands:
         - echo "Launching Kobuki Key op"
         - ros2 run kobuki_keyop kobuki_keyop_node --ros-args -r /cmd_vel:=/input/keyop_raw
-      commands:
+      - commands:
         - ros2 run velocity_smoother velocity_smoother --ros-args -r /velocity_smoother/input:=/input/keyop_raw -r /velocity_smoother/smoothed:=/input/keyop
 
 ########### Onboard controllers and Locomotion #############
   - name: Kobuki Safety Controller And CVX
     layout: tiled
     splits:
-      commands:
+      - commands:
         - ros2 run kobuki_safety_controller kobuki_safety_controller_node --ros-args -r /cmd_vel:=/input/safety_controller
-      commands:
+      - commands:
         - ros2 run cmd_vel_mux cmd_vel_mux_node --ros-args --params-file $(ros2 pkg prefix mk0_bringup)/share/mk0_bringup/config/cmd_vel_mux_params.yaml -r /cmd_vel:=/commands/velocity

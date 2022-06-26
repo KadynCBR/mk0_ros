@@ -1,42 +1,33 @@
 ---
 # Launches core nodes intended to be launched with auxillary_bringup on another computer.
 common:
-  # before_commands will be executed in each pane before doing anything else. Use this e.g. for
-  #   - sourcing an environment
-  #   - ssh-ing to another machine
   before_commands:
     - . $MK0_WS/install/setup.bash
-
-  # The default window will be the one displayed when first connecting to the tmux session
   default_window: Kobuki Core
 windows:
+########### Hardware Drivers #############
   - name: Kobuki Core
     commands:
       - echo "Launching Kobuki Core node"
       - ros2 launch kobuki_node kobuki_node-launch.py
-# SENSING
   - name: YDLidar
     commands:
       - . $MK0_WS/install/setup.bash
       - echo "Launching YDLidar"
       - ros2 launch ydlidar_ros2_driver ydlidar_launch.py
-# # realsense depth camera
-#   - name: Realsense
-#     commands:
-#       - ros2 run realsensewhatever
 
+########### Onboard controllers and Locomotion #############
+  - name: Kobuki Safety Controller And CVX
+    layout: tiled
+    splits:
+      commands:
+        - ros2 run kobuki_safety_controller kobuki_safety_controller_node --ros-args -r /cmd_vel:=/input/safety_controller
+      commands:
+        - ros2 run cmd_vel_mux cmd_vel_mux_node --ros-args --params-file $(ros2 pkg prefix mk0_bringup)/share/mk0_bringup/config/cmd_vel_mux_params.yaml -r /cmd_vel:=/commands/velocity
 
-########### Velocity output nodes ###########
-  - name: Kobuki_SAFE_CTRL
+########### Event Monitors #############
+  - name: mk0 Event Monitor
     commands:
-      - ros2 run kobuki_safety_controller kobuki_safety_controller_node --ros-args -r /cmd_vel:=/input/safety_controller
-
-  # All twist inputs go through vel mux
-  - name: cmd_vel_mux
-    commands:
-      - ros2 run cmd_vel_mux cmd_vel_mux_node --ros-args --params-file $(ros2 pkg prefix mk0_bringup)/share/mk0_bringup/config/cmd_vel_mux_params.yaml -r /cmd_vel:=/commands/velocity
-
-
-# FEEDBACK
-# Sound Server
-# Light Server
+      # MUST MAKE SURE THIS IS SET OTHERWISE SPEAKER WILL TAKE DOWN EVERYTHING.
+      - amixer set PCM 20%
+      - ros2 run mk0_event_server mk0_event_server

@@ -1,63 +1,61 @@
 ---
+# Gazebo simulation bringup
 common:
-  # before_commands will be executed in each pane before doing anything else. Use this e.g. for
-  #   - sourcing an environment
-  #   - ssh-ing to another machine
   before_commands:
     - . $MK0_WS/install/setup.bash
-
-  # The default window will be the one displayed when first connecting to the tmux session
   default_window: slam_toolbox
+parameters:
+  slam: false
 windows:
-# Navigation
-  - name: slam_toolbox
-    commands:
-      - ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true
-      # - ros2 launch mk0_bringup bringup_launch.py map:=/home/cherry/.maps/home_map.yaml controller_output_topic:=input/navigation_raw params_file:=$(ros2 pkg prefix mk0_bringup)/share/mk0_bringup/config/nav2_params.yaml use_sim_time:=true
+########### Navigation #############
+  - name: Slam Toolbox
+    if: slam
+    layout: tiled
+    splits:
+      commands: 
+        - ros2 launch slam_toolbox online_async_launch.py use_sim_time:=true
+      commands:
+        # is this even needed?
+        - ros2 run velocity_smoother velocity_smoother --ros-args -r /velocity_smoother/input:=/input/navigation_raw -r /velocity_smoother/smoothed:=/input/navigation
 
-  # Navigation Velocity Smoother
-  - name: velocity_smoother_navigation
-    commands:
-      - ros2 run velocity_smoother velocity_smoother --ros-args -r /velocity_smoother/input:=/input/navigation_raw -r /velocity_smoother/smoothed:=/input/navigation
+  - name: Navigation Bringup
+    unless: slam
+    layout: tiled
+    splits:
+      commands:
+        - ros2 launch mk0_bringup bringup_launch.py map:=/home/cherry/.maps/home_map.yaml controller_output_topic:=input/navigation_raw params_file:=$(ros2 pkg prefix mk0_bringup)/share/mk0_bringup/config/nav2_params.yaml use_sim_time:=true
+      commands:
+        - ros2 run velocity_smoother velocity_smoother --ros-args -r /velocity_smoother/input:=/input/navigation_raw -r /velocity_smoother/smoothed:=/input/navigation
 
 ########### Gazebo Launch #############
-# State publishers
-# gazebo
-# robot localizations
-  - name: Gazebo_and_stuff
+  - name: Gazebo and Friends
     commands:
       - export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH:/opt/ros/foxy/share/turtlebot3_gazebo/models
       - ros2 launch mk0_description gazebo_display.launch.py world:=$(ros2 pkg prefix mk0_description)/share/mk0_description/worlds/house_world.sdf use_sim_time:=true
 
-# LOCOMOTION (Should these just be launch files? should it all be a launch file?)
-  - name: JoyLaunch
-    commands:
-      - ros2 launch teleop_twist_joy teleop-launch.py joy_config:='xbox' joy_vel:=/input/joystick_raw 
-  # JoyVelSmoother
-  - name: velocity_smoother_joy
-    commands:
-      - ros2 run velocity_smoother velocity_smoother --ros-args -r /velocity_smoother/input:=/input/joystick_raw -r /velocity_smoother/smoothed:=/input/joystick
+########### Manual Control #############
+  - name: Joy Launch
+    layout: tiled
+    splits:
+      commands:
+        - ros2 launch teleop_twist_joy teleop-launch.py joy_config:='xbox' joy_vel:=/input/joystick_raw
+      commands:
+        - ros2 run velocity_smoother velocity_smoother --ros-args -r /velocity_smoother/input:=/input/joystick_raw -r /velocity_smoother/smoothed:=/input/joystick
 
   - name: Kobuki Keyop
-    commands:
-      - echo "Launching Kobuki Key op"
-      - ros2 run kobuki_keyop kobuki_keyop_node --ros-args -r /cmd_vel:=/input/keyop_raw
-  # keyop velocity smoother
-  - name: velocity_smoother_keyop
-    commands:
-      - ros2 run velocity_smoother velocity_smoother --ros-args -r /velocity_smoother/input:=/input/keyop_raw -r /velocity_smoother/smoothed:=/input/keyop
+    layout: tiled
+    splits:
+      commands:
+        - echo "Launching Kobuki Key op"
+        - ros2 run kobuki_keyop kobuki_keyop_node --ros-args -r /cmd_vel:=/input/keyop_raw
+      commands:
+        - ros2 run velocity_smoother velocity_smoother --ros-args -r /velocity_smoother/input:=/input/keyop_raw -r /velocity_smoother/smoothed:=/input/keyop
 
-
-########### Velocity output nodes ###########
-  - name: Kobuki_SAFE_CTRL
-    commands:
-      - ros2 run kobuki_safety_controller kobuki_safety_controller_node --ros-args -r /cmd_vel:=/input/safety_controller 
-
-  # All twist inputs go through vel mux
-  - name: cmd_vel_mux
-    commands:
-      - ros2 run cmd_vel_mux cmd_vel_mux_node --ros-args --params-file $(ros2 pkg prefix mk0_bringup)/share/mk0_bringup/config/cmd_vel_mux_params.yaml 
-
-# FEEDBACK
-# Sound Server
-# Light Server
+########### Onboard controllers and Locomotion #############
+  - name: Kobuki Safety Controller And CVX
+    layout: tiled
+    splits:
+      commands:
+        - ros2 run kobuki_safety_controller kobuki_safety_controller_node --ros-args -r /cmd_vel:=/input/safety_controller
+      commands:
+        - ros2 run cmd_vel_mux cmd_vel_mux_node --ros-args --params-file $(ros2 pkg prefix mk0_bringup)/share/mk0_bringup/config/cmd_vel_mux_params.yaml -r /cmd_vel:=/commands/velocity

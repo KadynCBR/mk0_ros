@@ -23,10 +23,6 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 install(
-  PROGRAMS scripts/bringup_all.sh
-  DESTINATION lib/${PROJECT_NAME}
-)
-install(
   PROGRAMS scripts/bringup_main.sh
   DESTINATION lib/${PROJECT_NAME}
 )

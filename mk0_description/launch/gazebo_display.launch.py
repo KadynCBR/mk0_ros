@@ -98,6 +98,6 @@ def generate_launch_description():
             joint_state_publisher_node,
             robot_state_publisher_node,
             spawn_entity,
-            robot_localization_node,
+            # robot_localization_node, # until I understand why this blows up the odom frame in simulation, this stays off.
         ]
     )

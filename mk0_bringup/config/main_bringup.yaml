@@ -17,9 +17,11 @@ windows:
       - ros2 launch ydlidar_ros2_driver ydlidar_launch.py
 
 ########### Onboard controllers and Locomotion #############
-  - name: Kobuki Safety Controller And CVX
+  - name: Onboard control and Loco
     layout: tiled
     splits:
+      - commands:
+        - ros2 run kobuki_auto_docking kobuki_auto_docking_node
       - commands:
         - ros2 run kobuki_safety_controller kobuki_safety_controller_node --ros-args -r /cmd_vel:=/input/safety_controller
       - commands:
